@@ -8,16 +8,16 @@ const userSchema = new Schema({
 })
 
 userSchema.pre('save', function(next) {
-  let salt
-  bcrypt.genSalt(10, (error, result) => {
+  bcrypt.genSalt(10, (error, salt) => {
     if (error) { return next(error) }
-    salt = result
-  })
-  // `this` is the user document that gonna be saved to mongoDB
-  bcrypt.hash(this.password, salt, null, (error, result) => {
-    if (error) { return next(error) }
-    this.password = result
-    next()
+    
+    // `this` is the user document that gonna be saved to mongoDB
+    bcrypt.hash(this.password, salt, null, (error, result) => {
+      if (error) { return next(error) }
+
+      this.password = result
+      next()
+    })
   })
 })
 

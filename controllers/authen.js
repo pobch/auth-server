@@ -1,6 +1,13 @@
 const mongoose = require('mongoose')
+const jwt = require('jwt-simple')
+const config = require('../config')
 
 const User = mongoose.model('User')
+
+const genTokenForUser = userDocument => {
+  const timestamp = new Date().getTime()
+  return jwt.encode({ sub: userDocument.id, iat: timestamp }, config.secret)
+}
 
 exports.signUp = async (req, res, next) => {
   try {
@@ -15,7 +22,7 @@ exports.signUp = async (req, res, next) => {
       email: email,
       password: password
     }).save()
-    return res.send(newUser)
+    return res.send({ token: genTokenForUser(newUser) })
   
   } catch(err) {
     console.log('>>>>>>>>> My error was caught <<<<<<<<<<<')
