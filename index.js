@@ -4,7 +4,11 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 require('./models/User')
 
-mongoose.connect('mongodb://localhost/auth')
+mongoose.connect('mongodb://localhost/auth').catch(err => {
+  console.log('connect to mongoDB error !!')
+  console.log(err)
+  process.exit(1)
+})
 
 const app = express()
 
