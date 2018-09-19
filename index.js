@@ -2,7 +2,9 @@ const express = require('express')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+
 require('./models/User')
+require('./services/passport')
 
 mongoose.connect('mongodb://localhost/auth').catch(err => {
   console.log('connect to mongoDB error !!')

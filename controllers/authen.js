@@ -29,3 +29,9 @@ exports.signUp = async (req, res, next) => {
     return next(err)
   }
 }
+
+exports.signIn = (req, res, next) => {
+  if (!req.user) { return res.send({ error: 'Wrong E-mail and/or Password' }) }
+
+  return res.send({ token: genTokenForUser(req.user) })
+}
