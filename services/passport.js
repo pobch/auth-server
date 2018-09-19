@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
+const JwtStrategy = require('passport-jwt').Strategy
+const ExtractJwt = require('passport-jwt').ExtractJwt
+const config = require('../config')
 
 const User = mongoose.model('User')
 
@@ -20,4 +23,19 @@ const localLogin = new LocalStrategy(localOptions, async (email, password, next)
   })
 })
 
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+  secretOrKey: config.secret
+}
+const jwtLogin = new JwtStrategy(jwtOptions, async (payload, next) => {
+  try {
+    const user = await User.findById(payload.sub)
+    if (!user) { return next(null, false) }
+    return next(null, user)
+  } catch (error) {
+    return next(error)
+  }
+})
+
 passport.use(localLogin)
+passport.use(jwtLogin)
