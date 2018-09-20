@@ -31,7 +31,10 @@ exports.signUp = async (req, res, next) => {
 }
 
 exports.signIn = (req, res, next) => {
-  if (!req.user) { return res.send({ error: 'Wrong E-mail and/or Password' }) }
+  // No need to check if(!req.user) because if the authorization fails,
+  // passport middleware will send an error response beforehand therefore this function
+  // will not be called
 
+  // If this function is called, it means the authorization was passed and completed
   return res.send({ token: genTokenForUser(req.user) })
 }
