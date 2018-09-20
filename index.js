@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 require('./models/User')
 require('./services/passport')
@@ -15,6 +16,7 @@ mongoose.connect('mongodb://localhost/auth').catch(err => {
 const app = express()
 
 app.use(morgan('combined'))
+app.use(cors())
 app.use(bodyParser.json())
 require('./router')(app)
 
